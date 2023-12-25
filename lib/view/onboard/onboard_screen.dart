@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komunoto/controller/onboard_controller.dart';
 import 'package:komunoto/view/Auth/login_page.dart';
 import 'package:komunoto/custom/button_login.dart';
 import 'package:komunoto/custom/button_passed.dart';
 import 'package:komunoto/view/home_screen/home_screen.dart';
 import 'slider.dart';
+import '/global/env.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,11 +19,13 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int currentIndex = 0;
   late PageController _controller;
+  final OnboardController onboardController = OnboardController();
 
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
     super.initState();
+    onboardController.fetchOnboardData();
   }
 
   @override
@@ -36,13 +41,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           PageView.builder(
             controller: _controller,
-            itemCount: contents.length,
+            itemCount: onboardController.onboardData.length,
             onPageChanged: (int index) {
               setState(() {
                 currentIndex = index;
               });
             },
-            itemBuilder: (_, i) {
+            itemBuilder: (context, index) {
+              final item = onboardController.onboardData[index];
               double width = MediaQuery.of(context).size.width;
               double height = MediaQuery.of(context).size.height;
               return Column(
@@ -52,20 +58,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         width * 0.05, height * 0.20, width * 0.05, 0),
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: Image.asset(
-                        contents[i].image,
+                      child: SvgPicture.network(
+                        '$dev_url/${item['image']}',
+                       
                       ),
                     ),
                   ),
                   Text(
-                    contents[i].title ?? '',
+                    item['title'] ?? '',
                     style: GoogleFonts.poppins(
                         fontSize: 30 * width / 720,
                         fontWeight: FontWeight.w600,
                         color: Colors.black),
                   ),
                   Text(
-                    contents[i].description,
+                    item['description'],
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                         fontSize: 25 * width / 720,
@@ -95,7 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   text: 'Masuk / Daftar',
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                        MaterialPageRoute(builder: (context) => const LoginPage()));
                   },
                 ),
                 const SizedBox(
@@ -104,7 +111,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ButtonPassed(
                   text: 'Lewati',
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
                   },
                 ),
               ],

@@ -10,7 +10,7 @@ class BarError{
           style: GoogleFonts.poppins(
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
         ),
-        backgroundColor: Color.fromARGB(255, 206, 32, 47));
+        backgroundColor: const Color.fromARGB(255, 206, 32, 47));
 
     if (messengerKey.currentState != null) {
     messengerKey.currentState!

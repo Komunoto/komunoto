@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +32,7 @@ class _VehicleFormState extends State<VehicleForm> {
   @override
   Widget build(BuildContext context) {
     FocusNode _focusNode = FocusNode();
-    List<String> _dropdownValues = ["One", "Two", "Three", "Four", "Five"];
+    List<String> _dropdownValues = ['One', 'Two', 'Three', 'Four', 'Five'];
     List<String> _filteredItems = _dropdownValues;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -58,7 +57,7 @@ class _VehicleFormState extends State<VehicleForm> {
                   Container(
                    decoration: BoxDecoration(
                      
-                      color: Color(0x1A2B2B2B),
+                      color: const Color(0x1A2B2B2B),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Padding(
@@ -145,10 +144,10 @@ class _VehicleFormState extends State<VehicleForm> {
                     initialCountryCode: 'ID',
                     languageCode: 'en',
                     onChanged: (phone) {
-                      print('0' + phone.number);
+                      print('0${phone.number}');
                     },
                     onSaved: (phone) {
-                      phoneNumber = '0' + phone!.number;
+                      phoneNumber = '0${phone!.number}';
                     },
                     onCountryChanged: (country) {
                       print('Country changed to: ${country.name}');
@@ -207,7 +206,7 @@ class _VehicleFormState extends State<VehicleForm> {
                         color: Colors.grey, // color of the border
                         width: 1, // width of the border
                       ),
-                      color: Color(0xFFFAFAFA),
+                      color: const Color(0xFFFAFAFA),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButtonHideUnderline(
@@ -349,11 +348,11 @@ class _VehicleFormState extends State<VehicleForm> {
                         borderSide: const BorderSide(color: Colors.grey, width:1),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      suffixIcon: Icon(Icons.calendar_today),
+                      suffixIcon: const Icon(Icons.calendar_today),
                     ),
                     onTap: () async {
                       FocusScope.of(context).requestFocus(
-                          new FocusNode()); // to prevent opening default keyboard
+                           FocusNode()); // to prevent opening default keyboard
                       final DateTime? picked = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),

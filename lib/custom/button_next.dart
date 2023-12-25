@@ -50,7 +50,7 @@ class ButtonNext extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFFFAFAFA),
+              color: const Color(0xFFFAFAFA),
             ),
           ),
         ),

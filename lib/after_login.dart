@@ -1,11 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:komunoto/not_registered.dart';
-import 'package:komunoto/survey.dart';
 import 'package:komunoto/view/Auth/login_page.dart';
-import 'package:komunoto/view/form/vehicle_form.dart';
 import 'package:komunoto/view/home_screen/home_screen.dart';
-import 'package:komunoto/view/interest_screen/interest_screen.dart';
 
 class AfterLogin extends StatefulWidget {
   const AfterLogin({super.key});

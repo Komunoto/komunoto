@@ -133,7 +133,7 @@ class _AuthNumberPhoneState extends State<AuthNumberPhone> {
 
                             if (user != null) {
                               // The user exists, navigate to the AfterLogin page
-                              auth.postLogin(widget.phoneNumber);
+                              auth.postLogin(widget.phoneNumber, user.uid, user.email);
                             }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'invalid-verification-code') {

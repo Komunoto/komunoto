@@ -9,8 +9,6 @@ import 'package:komunoto/view/Auth/auth_number_phone.dart';
 import 'package:komunoto/custom/button_login_apple.dart';
 import 'package:komunoto/custom/button_login_google.dart';
 import 'package:komunoto/custom/button_login_sent.dart';
-import 'package:komunoto/view/home_screen/home_screen.dart';
-import 'package:komunoto/view/interest_screen/interest_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,10 +83,10 @@ class _LoginPageState extends State<LoginPage> {
                       initialCountryCode: 'ID',
                       languageCode: 'en',
                       onChanged: (phone) {
-                        print('0' + phone.number);
+                        print(phone.completeNumber);
                       },
                       onSaved: (phone) {
-                        phoneNumber = '0' + phone!.number;
+                        phoneNumber = phone!.completeNumber;
                       },
                       onCountryChanged: (country) {
                         print('Country changed to: ${country.name}');
@@ -112,43 +110,36 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ButtonLoginSent(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              const HomeScreen(),
-                        ),
-                      );
-                      // if (_formkey.currentState!.validate()) {
-                      //   _formkey.currentState!.save();
-                      //   _auth.verifyPhoneNumber(
-                      //     phoneNumber: phoneNumber,
-                      //     timeout: const Duration(seconds: 60),
-                      //     verificationCompleted:
-                      //         (PhoneAuthCredential credential) async {
-                      //       // This callback will be invoked when the verification is done automatically
-                      //       await _auth.signInWithCredential(credential);
-                      //     },
-                      //     verificationFailed: (FirebaseAuthException e) {
-                      //       // Handle the error here
-                      //       print(e.message);
-                      //     },
-                      //     codeSent: (String verificationId, int? resendToken) {
-                      //       // Update the UI - wait for the user to enter the SMS code
-                      //       showModalBottomSheet(
-                      //           context: context,
-                      //           isScrollControlled: true,
-                      //           builder: (context) => AuthNumberPhone(
-                      //                 phoneNumber: phoneNumber,
-                      //                 verificationId: verificationId,
-                      //               ));
-                      //     },
-                      //     codeAutoRetrievalTimeout: (String verificationId) {
-                      //       // This callback will be invoked when auto retrieval times out
-                      //       // You can use this `verificationId` to create `PhoneAuthCredential`
-                      //     },
-                      //   );
-                      // }
+                      if (_formkey.currentState!.validate()) {
+                        _formkey.currentState!.save();
+                        _auth.verifyPhoneNumber(
+                          phoneNumber: phoneNumber,
+                          timeout: const Duration(seconds: 60),
+                          verificationCompleted:
+                              (PhoneAuthCredential credential) async {
+                            // This callback will be invoked when the verification is done automatically
+                            await _auth.signInWithCredential(credential);
+                          },
+                          verificationFailed: (FirebaseAuthException e) {
+                            // Handle the error here
+                            print('${e.message} ok');
+                          },
+                          codeSent: (String verificationId, int? resendToken) {
+                            // Update the UI - wait for the user to enter the SMS code
+                            showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => AuthNumberPhone(
+                                      phoneNumber: phoneNumber,
+                                      verificationId: verificationId,
+                                    ));
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {
+                            // This callback will be invoked when auto retrieval times out
+                            // You can use this `verificationId` to create `PhoneAuthCredential`
+                          },
+                        );
+                      }
                     },
                     buttonText: 'Kirim',
                   ),

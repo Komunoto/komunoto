@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:komunoto/controller/interest_screen_controller.dart';
 import 'package:komunoto/custom/button_next.dart';
 import 'package:komunoto/custom/button_passed.dart';
 
@@ -13,11 +14,30 @@ class InterestScreen extends StatefulWidget {
 class _InterestScreenState extends State<InterestScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  InterestScreenController controller = InterestScreenController();
+  List<Map<dynamic, dynamic>> cars = [];
+  List<Map<dynamic, dynamic>> motorcycle = [];
+  List<int> selectedCars = [];
+  List<int> selectedMotorcycle = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    loadCars();
+    loadMotorcycle();
+    controller.initializeToken();
+  }
+
+  Future<void> loadCars() async {
+    cars = await controller.getCars();
+    setState(() {}); // Call setState to trigger a rebuild
+   
+  }
+  Future<void> loadMotorcycle() async {
+    motorcycle = await controller.getMotorcycle();
+    setState(() {}); // Call setState to trigger a rebuild
+   
   }
 
   @override
@@ -27,29 +47,8 @@ class _InterestScreenState extends State<InterestScreen>
   }
 
   @override
-  Set<String> selectedCars = {};
-  Set<String> selectedMotorcycle = {};
-  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    List<String> cars = [
-      'Car1',
-      'Car2',
-      'Car3',
-      'Car4',
-      'Car5',
-      'Car6',
-      'Car7',
-      'Car8',
-      'Car9',
-    ]; // replace with your list of cars
-    List<String> motorcycles = [
-      'Motorcycle1',
-      'Motorcycle2',
-      'Motorcycle3'
-    ]; // replace with your list of motorcycles
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -108,10 +107,11 @@ class _InterestScreenState extends State<InterestScreen>
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (selectedCars.contains(car)) {
-                                selectedCars.remove(car);
+                              dynamic carName = car['id'];
+                              if (selectedCars.contains(carName)) {
+                                selectedCars.remove(carName);
                               } else {
-                                selectedCars.add(car);
+                                selectedCars.add(carName);
                               }
                             });
                           },
@@ -122,26 +122,28 @@ class _InterestScreenState extends State<InterestScreen>
                                 gradient: LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  colors: selectedCars.contains(car)
-                                      ? [
-                                          Color(0xB3EE7D32),
-                                          Color(0xCCEE7D32),
-                                          Color(0xE6EE7D32),
-                                          Color(0xE6EE7D32),
-                                          Color(0xE6EE7D32),
-                                          Color(0xFFEE7D32),
-                                          Color(0xFFEE7D32),
-                                          Color(0xFFEE7D32),
-                                          Color(0xFFEE7D32),
-                                          Color(0xFFEE7D32),
-                                          Color(0xFFEE7D32),
-                                        ]
-                                      : [Colors.white, Colors.white],
+                                  colors:
+                                      selectedCars.contains(car['id'])
+                                          ? [
+                                              const Color(0xB3EE7D32),
+                                              const Color(0xCCEE7D32),
+                                              const Color(0xE6EE7D32),
+                                              const Color(0xE6EE7D32),
+                                              const Color(0xE6EE7D32),
+                                      const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                            ]
+                                      :
+                                      [Colors.white, Colors.white],
                                 ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(car),
+                                child: Text(car['name']),
                               ),
                             ),
                           ),
@@ -153,44 +155,46 @@ class _InterestScreenState extends State<InterestScreen>
                     padding: const EdgeInsets.all(20.0),
                     child: Wrap(
                       direction: Axis.horizontal,
-                      children: motorcycles.map((motorcycle) {
+                      children: motorcycle.map((motorcycle) {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (selectedMotorcycle.contains(motorcycle)) {
-                                selectedMotorcycle.remove(motorcycle);
+                             dynamic motorcycleName = motorcycle['id'];
+                              if (selectedMotorcycle.contains(motorcycleName)) {
+                                selectedMotorcycle.remove(motorcycleName);
                               } else {
-                                selectedMotorcycle.add(motorcycle);
+                                selectedMotorcycle.add(motorcycleName);
                               }
                             });
                           },
                           child: Card(
                             child: Container(
                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(10),
                                 gradient: LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors:
-                                      selectedMotorcycle.contains(motorcycle)
+                                      selectedMotorcycle.contains(motorcycle['id'])
                                           ? [
-                                              Color(0xB3EE7D32),
-                                              Color(0xCCEE7D32),
-                                              Color(0xE6EE7D32),
-                                              Color(0xE6EE7D32),
-                                              Color(0xE6EE7D32),
-                                              Color(0xFFEE7D32),
-                                              Color(0xFFEE7D32),
-                                              Color(0xFFEE7D32),
-                                              Color(0xFFEE7D32),
-                                              Color(0xFFEE7D32),
-                                              Color(0xFFEE7D32),
+                                              const Color(0xB3EE7D32),
+                                              const Color(0xCCEE7D32),
+                                              const Color(0xE6EE7D32),
+                                              const Color(0xE6EE7D32),
+                                              const Color(0xE6EE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
+                                              const Color(0xFFEE7D32),
                                             ]
                                           : [Colors.white, Colors.white],
                                 ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(motorcycle),
+                                child: Text(motorcycle['name']),
                               ),
                             ),
                           ),
@@ -209,9 +213,10 @@ class _InterestScreenState extends State<InterestScreen>
                 children: [
                   ButtonNext(
                     text: 'Selanjutnya',
-                    onPressed: () {
-                      print('Selected cars: $selectedCars');
-                      print('Selected motorcycles: $selectedMotorcycle');
+                    onPressed: () async {
+                    var data = selectedCars + selectedMotorcycle;
+                    print(controller.token);
+                    await controller.postSelectedInterests(context, data);
                     },
                   ),
                   const SizedBox(

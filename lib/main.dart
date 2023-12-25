@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:komunoto/after_login.dart';
-import 'package:komunoto/view/Auth/login_page.dart';
+import 'package:komunoto/view/home_screen/home_screen.dart';
 import 'package:komunoto/view/onboard/onboard_screen.dart';
 import 'package:komunoto/view/splash_screen/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'view/function/firebase_options.dart';
+import 'function/firebase_options.dart';
 import 'package:after_layout/after_layout.dart';
 
 int? initScreen;
@@ -17,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -46,29 +45,30 @@ class Splash extends StatefulWidget {
 }
 
 class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
-  Future checkLoginStatus() async {
-    final user = FirebaseAuth.instance.currentUser;
+  // Future checkLoginStatus() async {
+  //   final user = FirebaseAuth.instance.currentUser;
     
-    if (user != null) {
-      Timer(
-        const Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => const AfterLogin())),
-      );
-    } else {
-      checkFirstSeen();
-    }
-  }
+  //   if (user != null) {
+  //     Timer(
+  //       const Duration(seconds: 3),
+  //       () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //           builder: (BuildContext context) => const HomeScreen())),
+  //     );
+  //   } else {
+  //     checkFirstSeen();
+  //   }
+  // }
 
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
     if (_seen) {
+      print(_seen);
       Timer(
           const Duration(seconds: 3),
           () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => const LoginPage())));
+              builder: (BuildContext context) => const HomeScreen())));
     } else {
       await prefs.setBool('seen', true);
       Timer(
@@ -79,7 +79,7 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
   }
 
   @override
-  void afterFirstLayout(BuildContext context) => checkLoginStatus();
+  void afterFirstLayout(BuildContext context) => checkFirstSeen();
 
   @override
   Widget build(BuildContext context) {

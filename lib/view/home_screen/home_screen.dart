@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:komunoto/custom/color.dart';
 import 'package:komunoto/view/home_screen/beranda_page.dart';
+import 'package:komunoto/view/home_screen/profile_page..dart';
 import 'package:komunoto/view/search/data_search.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     BerandaPage(),
     Text('Search'),
     Text('Likes'),
-    Text('Profile'),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -30,10 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+      automaticallyImplyLeading: false,
         title: Row(
           children: <Widget>[
             Image.asset(
